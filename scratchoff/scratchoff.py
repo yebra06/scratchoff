@@ -16,7 +16,6 @@ def get_scratchoff_attributes():
     :return: List of column headers.
     """
     table_url = soup.find('a', href=True, text='Printer-friendly version')
-
     if table_url is None:
         common_pattern = '/export/sites/lottery/Games/Scratch_Offs/print'
         possible_links = []
@@ -44,7 +43,6 @@ def get_csv_url():
     :return: URL to download csv sheet.
     """
     csv_url = soup.find('a', href=True, text='All Levels (.csv)')
-
     if csv_url is None:
         # TODO: Create a common_pattern regex. See get_scratchoff_attribute().
         links_ending_with_csv = []
@@ -61,7 +59,6 @@ if __name__ == '__main__':
     csv_data = []
     csv_reader = csv.reader(
     requests.get(get_csv_url()).iter_lines(), delimiter=',')
-
     for i in csv_reader:
         if i:
             csv_data.append(i)
