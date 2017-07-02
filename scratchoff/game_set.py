@@ -37,7 +37,6 @@ class GameSet:
         self.gameset = set()
         if data is not None:
             for line in data:
-                print(line)
                 game = Game(line[0], line[1], line[2], line[3], line[4], line[5], line[6])
                 self.gameset.add(game)
 
