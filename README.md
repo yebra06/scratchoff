@@ -1,2 +1,0 @@
-# scratchoff
-Scratch-off lotto.
