@@ -7,7 +7,7 @@ import requests
 
 base_lotto_url = 'http://www.txlottery.org/'
 start_url = base_lotto_url + 'export/sites/lottery/Games/Scratch_Offs/all.html'
-soup = BeautifulSoup(requests.get(start_url).text, 'html.parser')
+scratchoff_soup = BeautifulSoup(requests.get(start_url).text, 'html.parser')
 
 
 def get_scratchoff_attributes():
@@ -15,11 +15,11 @@ def get_scratchoff_attributes():
 
     :return: List of column headers.
     """
-    table_url = soup.find('a', href=True, text='Printer-friendly version')
+    table_url = scratchoff_soup.find('a', href=True, text='Printer-friendly version')
     if table_url is None:
         common_pattern = '/export/sites/lottery/Games/Scratch_Offs/print'
         possible_links = []
-        for link in soup.find_all('a', href=True):
+        for link in scratchoff_soup.find_all('a', href=True):
             if re.search(common_pattern, link.get('href')):
                 possible_links.append(link)
         if len(possible_links) == 1:
@@ -42,11 +42,11 @@ def get_rinsed_data():
 
     :return: Scratchoff data.
     """
-    csv_url = soup.find('a', href=True, text='All Levels (.csv)')
+    csv_url = scratchoff_soup.find('a', href=True, text='All Levels (.csv)')
     if csv_url is None:
         # TODO: Create a common_pattern regex. See get_scratchoff_attribute().
         links_ending_with_csv = []
-        for link in soup.find_all('a', href=True):
+        for link in scratchoff_soup.find_all('a', href=True):
             if re.search('.csv', link.get('href')):
                 links_ending_with_csv.append(link)
         if len(links_ending_with_csv) == 1:

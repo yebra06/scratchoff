@@ -1,4 +1,4 @@
-from game_set import GameSet
+from gameset import GameSet
 from utils import get_rinsed_data
 
 
