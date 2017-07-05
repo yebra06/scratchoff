@@ -18,20 +18,14 @@ def get_scratchoff_attributes():
     table_url = scratchoff_soup.find('a', href=True, text='Printer-friendly version')
     if table_url is None:
         common_pattern = '/export/sites/lottery/Games/Scratch_Offs/print'
-        possible_links = []
-        for link in scratchoff_soup.find_all('a', href=True):
-            if re.search(common_pattern, link.get('href')):
-                possible_links.append(link)
-        if len(possible_links) == 1:
-            table_url = possible_links[0].get('href')
+        possible_links = [
+            link for link in scratchoff_soup.find_all('a', href=True)
+            if re.search(common_pattern, link.get('href'))]
+        table_url = possible_links[0].get('href') if len(possible_links) == 1 else None
     else:
         table_url = base_lotto_url + table_url.get('href')
     table_soup = BeautifulSoup(requests.get(table_url).text, 'html.parser')
-    fields = []
-    for header in table_soup.find_all('th'):
-        if header.text != u'\xa0':
-            fields.append(str(header.text))
-    return fields
+    return [header for header in table_soup.find_all('th') if header.text != 'u\xa0']
 
 
 def get_rinsed_data():
@@ -45,16 +39,10 @@ def get_rinsed_data():
     csv_url = scratchoff_soup.find('a', href=True, text='All Levels (.csv)')
     if csv_url is None:
         # TODO: Create a common_pattern regex. See get_scratchoff_attribute().
-        links_ending_with_csv = []
-        for link in scratchoff_soup.find_all('a', href=True):
-            if re.search('.csv', link.get('href')):
-                links_ending_with_csv.append(link)
+        links_ending_with_csv = [
+            link for link in scratchoff_soup.find_all('a', href=True)
+            if re.search('.csv', link.get('href'))]
         if len(links_ending_with_csv) == 1:
             return base_lotto_url + links_ending_with_csv[0].get('href')
-    csv_data = []
-    csv_reader = csv.reader(requests.get(csv_url.get('href')).iter_lines(), delimiter=',')
-    for i in csv_reader:
-        if i:
-            csv_data.append(i)
-    del csv_data[0:2]
+    csv_data = [i for i in csv.reader(requests.get(csv_url.get('href')).iter_lines(), delimiter=',') if i][2:]
     return csv_data
