@@ -1,4 +1,6 @@
 # Scratchoff
+.. image:: https://travis-ci.org/yebra06/scratchoff.svg?branch=master
+  :target: https://travis-ci.org/yebra06/scratchoff
 Analyze scratch-off lottery game data.
 
 ### Visualize Data
