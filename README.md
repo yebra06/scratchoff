@@ -1,4 +1,4 @@
-# Scratch-off lotto.
+# Scratchoff
 Analyze scratch-off lottery game data.
 
 ###Visualize Data
@@ -6,4 +6,9 @@ Analyze scratch-off lottery game data.
  $ git clone https://github.com/yebra06/scratchoff.git
  $ cd scratchoff
  $ python3 main.py
+```
+
+###Testing
+```
+ $ python3 -m unittest
 ```
