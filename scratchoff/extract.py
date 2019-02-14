@@ -4,6 +4,29 @@ import urllib.request
 import config
 
 
+# Get raw data directly from request.
+with urllib.request.urlopen(config.ALL_GAMES_URL) as d:
+    raw = [i.decode('ISO-8859-1') for i in d]
+
+
+def raw_data():
+    """Return list of raw data."""
+    return raw
+
+
+def clean_data():
+    """Extract and process all game data from site.
+
+    Returns:
+        list: List of dicts of all games.
+    """
+    col_names = [x.strip().lower() for x in raw[1].split(',')]
+    return transform_to_numbers([
+        dict(zip(col_names, extract_game_info(i)))
+        for i in raw[2:] if 'TOTAL' not in i
+    ])
+
+
 def extract_game_info(line):
     """Extract game info from line.
 
@@ -12,18 +35,6 @@ def extract_game_info(line):
 
     Returns:
         list: List of single games' info.
-
-    Note:
-        The returned list should have 7 elements.
-
-        Data at each index:
-            0 - game #
-            1 - game name
-            2 - game close date
-            3 - ticket price
-            4 - prize level
-            5 - total prizes
-            6 - prizes claimed
     """
     data = []
     line = line.strip()
@@ -69,26 +80,8 @@ def transform_to_numbers(game_data):
                 game[k] = int(v)
             except ValueError:
                 pass
-
         if game['prizes claimed'] == '':
             game['prizes claimed'] = 0
         game['prizes remaining'] = game['total prizes in level'] - game['prizes claimed']
 
     return game_data
-
-
-def extract_data():
-    """Extract and process all game data from site.
-
-    Returns:
-        list: List of dicts of all games.
-    """
-    with urllib.request.urlopen(config.ALL_GAMES_URL) as d:
-        data = [i.decode('ISO-8859-1') for i in d]
-
-    col_names = [x.strip().lower() for x in data[1].split(',')]
-
-    return transform_to_numbers([
-        dict(zip(col_names, extract_game_info(i)))
-        for i in data[2:] if 'TOTAL' not in i
-    ])

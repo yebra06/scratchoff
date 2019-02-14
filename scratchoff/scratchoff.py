@@ -1,4 +1,4 @@
-from .extract import extract_data
+from . import clean_data
 
 
 def all_games():
@@ -7,4 +7,4 @@ def all_games():
     Returns:
         list: List of dicts holding game data.
     """
-    return extract_data()
+    return clean_data()
