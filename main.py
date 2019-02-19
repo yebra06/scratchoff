@@ -1,8 +1,10 @@
-from scratchoff import all_games
+from scratchoff import Scratchoff
 
 
 def main():
-    [print(i) for i in all_games()]
+    s = Scratchoff()
+    for i in s.all_games:
+        print(i)
 
 
 if __name__ == '__main__':

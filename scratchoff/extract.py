@@ -40,7 +40,7 @@ def extract_game_info(line):
     line = line.strip()
 
     # Game number
-    data.append(line[0:3])
+    data.append(line[0:4])
 
     # Game name
     line = line[6:]
